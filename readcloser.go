@@ -16,16 +16,14 @@ type BufferedReadCloser struct {
 var _ io.ReadCloser = &BufferedReadCloser{}
 
 // Close closes the parent io.ReadCloser.
-func (r *BufferedReadCloser) Close() error {
-	return r.Close()
+func (b *BufferedReadCloser) Close() error {
+	return b.r.Close()
 }
 
-// NewBufferedReadCloser returns a new BufferedReadCloser.
+// NewBufferedReadCloser wraps a io.ReadCloser with a bufio.Reader that can be
+// closed.
 func NewBufferedReadCloser(r io.ReadCloser) *BufferedReadCloser {
-	return &BufferedReadCloser{
-		r,
-		bufio.NewReader(r),
-	}
+	return &BufferedReadCloser{r, bufio.NewReader(r)}
 }
 
 // GzipReadCloser implements a gzip.Reader.
